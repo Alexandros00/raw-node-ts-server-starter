@@ -1,6 +1,6 @@
 import { IncomingMessage, ServerResponse } from "http";
-import { products } from "../../product/interfaces/product.interface";
-import { getPathParts, sendJsonResponse } from "../../utils/httpUtils";
+import { getPathParts, sendJsonResponse } from "../../utils/httpUtils.js";
+import { products } from "../../product/interfaces/product.interface.js";
 
 export function handleProductsGetRequest(req: IncomingMessage, res: ServerResponse) {
   const { resource, stringId } = getPathParts(req.url ?? "");

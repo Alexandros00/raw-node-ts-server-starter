@@ -1,5 +1,5 @@
 import http from "http";
-import { handleProducts } from "./routes/products/products";
+import { handleProducts } from "./routes/products/products.js";
 
 const server = http.createServer((req, res) => {
   if (req.url === "/" && req.method === "GET") {

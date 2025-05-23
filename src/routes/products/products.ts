@@ -1,7 +1,7 @@
 import { IncomingMessage, ServerResponse } from "http";
-import { products, Product } from "../../product/interfaces/product.interface";
-import { parseJsonBody } from "../../utils/httpUtils";
-import { handleProductsGetRequest } from "./get";
+import { handleProductsGetRequest } from "./get.js";
+import { parseJsonBody } from "../../utils/httpUtils.js";
+import { Product, products } from "../../product/interfaces/product.interface.js";
 
 export async function handleProducts(req: IncomingMessage, res: ServerResponse) {
   if (req.method === "GET") {
