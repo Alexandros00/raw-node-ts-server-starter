@@ -1,4 +1,4 @@
-import { Product } from "../../product/interfaces/product.interface";
+import { Product } from "../../product/interfaces/product.interface.js";
 
 export class ProductInMemory {
   private _products: Product[] = [];
@@ -25,6 +25,10 @@ export class ProductInMemory {
   protected updateItem(index: number, product: Product): Product {
     this._products[index] = product;
     return this._products[index];
+  }
+
+  protected deleteItem(index: number): void {
+    this._products.splice(index, 1);
   }
 
   protected saveAllToMemory(products: Product[]): void {

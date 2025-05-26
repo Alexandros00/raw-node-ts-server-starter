@@ -12,6 +12,8 @@ export async function handleProducts(req: IncomingMessage, res: ServerResponse) 
     handleProductsPostRequest(req, res);
   } else if (req.method === "PUT") {
     handleProductsPutRequest(req, res);
+  } else if (req.method === "DELETE") {
+    handleProductsDeleteRequest(req, res);
   } else {
     res.writeHead(405, { "Content-Type": "text/plain" });
     res.end("Method not allowed");

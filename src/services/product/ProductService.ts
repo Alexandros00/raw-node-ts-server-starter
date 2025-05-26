@@ -75,6 +75,25 @@ class ProductService extends ProductInMemory {
     }
   }
 
+  async deleteProduct(id: number): Promise<void> {
+    if (!Number.isInteger(id) && id < 0) {
+      throw new HttpError("Invalid ID", 400);
+    }
+
+    try {
+      const productIndex = this.getAllProducts().findIndex((p) => p.id === id);
+      if (productIndex >= 0) {
+        this.deleteItem(productIndex);
+
+        await fs.writeFile(this._productsFileName, JSON.stringify(this.getAllFromMemory()), "utf-8");
+      } else {
+        throw new HttpError("Product not found", 404);
+      }
+    } catch (error) {
+      handleFsError(error, "Error writing in DB file");
+    }
+  }
+
   async init() {
     console.log("INIT");
     const products = await this.fetchProducts();
