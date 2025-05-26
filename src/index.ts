@@ -1,5 +1,6 @@
 import http from "http";
 import { handleProducts } from "./routes/products/products.js";
+import productService from "./services/product/ProductService.js";
 
 const server = http.createServer((req, res) => {
   if (req.url === "/" && req.method === "GET") {
@@ -13,6 +14,8 @@ const server = http.createServer((req, res) => {
   }
 });
 
-server.listen(3002, () => {
+server.listen(3002, async () => {
   console.log("Server running at http://localhost:3002");
+  await productService.init();
+  console.log("DB is ready!");
 });
