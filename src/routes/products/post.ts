@@ -1,34 +1,25 @@
 import { IncomingMessage, ServerResponse } from "http";
 import { parseJsonBody, sendJsonResponse } from "../../utils/httpUtils.js";
-import { Product, products } from "../../product/interfaces/product.interface.js";
+import productService from "../../services/product/ProductService.js";
+import { HttpError } from "../HttpError.js";
 
 export async function handleProductsPostRequest(req: IncomingMessage, res: ServerResponse) {
   try {
-    const parsed = await parseJsonBody(req);
+    const parsedNewProduct = await parseJsonBody(req);
 
-    if (!parsed.name) {
-      sendJsonResponse(res, 400, { error: "Invalid product name" });
+    const newProduct = await productService.postProduct(parsedNewProduct);
+    if (!newProduct) {
+      sendJsonResponse(res, 500, { error: "Failed to save product" });
       return;
     }
-    if (typeof parsed.price !== "number" || parsed.price < 0) {
-      sendJsonResponse(res, 400, { error: "Invalid product price" });
-      return;
-    }
-
-    const newProduct: Product = {
-      id: products.length + 1,
-      name: parsed.name,
-      price: parsed.price,
-    };
-
-    products.push(newProduct);
-
     sendJsonResponse(res, 201, newProduct);
   } catch (err: unknown) {
-    if (err instanceof Error) {
-      sendJsonResponse(res, 400, { error: err.message });
+    if (err instanceof HttpError) {
+      sendJsonResponse(res, err.status, { error: err.message });
+    } else if (err instanceof Error) {
+      sendJsonResponse(res, 500, { error: err.message });
     } else {
-      sendJsonResponse(res, 400, { error: err });
+      sendJsonResponse(res, 500, { error: String(err) });
     }
   }
 }
